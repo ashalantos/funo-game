@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Adaptive icon foreground: FUNO! text logo in gold -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Background circle -->
+    <path
+        android:fillColor="#302b63"
+        android:pathData="M54,54m-54,0a54,54 0,1 1,108 0a54,54 0,1 1,-108 0" />
+
+    <!-- "F" letter in gold -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M32,28 L32,80 L42,80 L42,58 L65,58 L65,49 L42,49 L42,37 L68,37 L68,28 Z" />
+
+    <!-- Exclamation mark -->
+    <path
+        android:fillColor="#ff6b6b"
+        android:pathData="M72,28 L76,60 L72,60 L68,28 Z M70,64 L74,64 L74,72 L70,72 Z" />
+
+</vector>

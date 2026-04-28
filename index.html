@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FUNO! 🃏</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ── Notifications (toasts) ───────────────────────────────────── -->
+<div id="notif-area"></div>
+
+<!-- ── Confetti canvas ──────────────────────────────────────────── -->
+<canvas id="confetti-canvas" class="hidden"></canvas>
+
+<!-- ── Bot thinking bar ─────────────────────────────────────────── -->
+<div id="bot-thinking" class="hidden">
+  <span class="dot">●</span><span class="dot">●</span><span class="dot">●</span>
+  <span id="bot-thinking-name"> is thinking</span>
+</div>
+
+<!-- ================================================================
+     SETUP SCREEN
+=================================================================== -->
+<div id="setup-screen">
+  <h1 class="game-title">FUNO!</h1>
+  <p class="game-subtitle">The Ultimate Fun Card Game 🃏✨</p>
+
+  <div class="setup-grid">
+
+    <!-- Players -->
+    <div class="setup-card">
+      <h3>🎮 Players</h3>
+      <div class="field">
+        <label for="player-name">Your Name</label>
+        <input type="text" id="player-name" value="Player 1" maxlength="16" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="num-players">Total Players (incl. you)</label>
+        <div class="slider-wrap">
+          <input type="range" id="num-players" min="2" max="6" value="3">
+          <span class="slider-val" id="num-players-val">3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deck -->
+    <div class="setup-card">
+      <h3>🎨 Deck Settings</h3>
+      <div class="field">
+        <label for="num-colors">Number of Colors</label>
+        <div class="slider-wrap">
+          <input type="range" id="num-colors" min="2" max="8" value="4">
+          <span class="slider-val" id="num-colors-val">4</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="max-number">Max Number on Cards</label>
+        <div class="slider-wrap">
+          <input type="range" id="max-number" min="3" max="15" value="9">
+          <span class="slider-val" id="max-number-val">9</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Draw cards -->
+    <div class="setup-card">
+      <h3>⬆️ Draw Cards</h3>
+      <div class="toggle-grid">
+        <label class="toggle-item"><input type="checkbox" id="draw1" checked><span>+1 Draw</span></label>
+        <label class="toggle-item"><input type="checkbox" id="draw2" checked><span>+2 Draw</span></label>
+        <label class="toggle-item"><input type="checkbox" id="draw3" checked><span>+3 Wild</span></label>
+        <label class="toggle-item"><input type="checkbox" id="draw4" checked><span>+4 Wild</span></label>
+        <label class="toggle-item"><input type="checkbox" id="draw5" checked><span>+5 Wild</span></label>
+      </div>
+    </div>
+
+    <!-- Variety cards -->
+    <div class="setup-card">
+      <h3>🌟 Variety Cards</h3>
+      <div class="variety-list">
+        <label class="toggle-item">
+          <input type="checkbox" id="var-swap" checked>
+          <div><span>↔️ SWAP Hands</span><div class="variety-info">Pick a player, swap entire hands</div></div>
+        </label>
+        <label class="toggle-item">
+          <input type="checkbox" id="var-bomb" checked>
+          <div><span>💣 BOMB</span><div class="variety-info">All other players draw 2 cards</div></div>
+        </label>
+        <label class="toggle-item">
+          <input type="checkbox" id="var-lucky" checked>
+          <div><span>🍀 LUCKY DRAW</span><div class="variety-info">Next player draws until playable card</div></div>
+        </label>
+        <label class="toggle-item">
+          <input type="checkbox" id="var-mirror" checked>
+          <div><span>🪞 MIRROR</span><div class="variety-info">Reflect a draw stack back to sender</div></div>
+        </label>
+        <label class="toggle-item">
+          <input type="checkbox" id="var-chaos" checked>
+          <div><span>🌀 CHAOS</span><div class="variety-info">Shuffle &amp; redistribute all hands!</div></div>
+        </label>
+      </div>
+    </div>
+
+  </div><!-- /setup-grid -->
+
+  <div id="start-btn-wrap">
+    <button class="btn btn-primary" id="start-btn">🎉 Start Game!</button>
+  </div>
+</div><!-- /setup-screen -->
+
+<!-- ================================================================
+     GAME SCREEN
+=================================================================== -->
+<div id="game-screen" class="hidden">
+
+  <!-- Opponents row -->
+  <div id="opponents-area"></div>
+
+  <!-- Table -->
+  <div id="game-table">
+    <div id="table-center">
+
+      <!-- Draw pile -->
+      <div id="deck-pile">
+        <div class="deck-shadow2"><div class="card face-down"><div class="card-inner"></div></div></div>
+        <div class="deck-shadow"><div class="card face-down"><div class="card-inner"></div></div></div>
+        <div class="card face-down" id="draw-card-btn" title="Click to draw a card" role="button" tabindex="0">
+          <div class="card-inner"><span class="card-back-logo">F</span></div>
+        </div>
+        <div id="deck-count">-- left</div>
+      </div>
+
+      <!-- Info panel -->
+      <div id="game-info">
+        <div id="direction-indicator">➡️</div>
+        <div id="draw-stack-badge" style="display:none">+0</div>
+        <div id="current-color-wrap">
+          <div id="current-color-label">Color</div>
+          <div id="current-color-dot"></div>
+        </div>
+        <div id="turn-label">Your Turn!</div>
+      </div>
+
+      <!-- Discard pile -->
+      <div id="discard-pile">
+        <div id="discard-label">Discard</div>
+        <div id="discard-top"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Human player area -->
+  <div id="player-area">
+    <div id="player-info-row">
+      <div id="player-name-label">You</div>
+      <div id="player-actions">
+        <button id="uno-btn" style="display:none">UNO! 🎉</button>
+      </div>
+    </div>
+    <div id="player-hand"></div>
+  </div>
+
+</div><!-- /game-screen -->
+
+<!-- ================================================================
+     MODALS
+=================================================================== -->
+
+<!-- Color Picker -->
+<div id="color-picker-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <h2>🎨 Choose a Color</h2>
+    <div id="color-grid"></div>
+  </div>
+</div>
+
+<!-- Swap Picker -->
+<div id="swap-picker-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <h2>↔️ Swap Hands With...</h2>
+    <div id="swap-player-list"></div>
+    <button class="btn btn-secondary btn-sm" id="cancel-swap-btn">Cancel</button>
+  </div>
+</div>
+
+<!-- Game Over -->
+<div id="gameover-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <div class="winner-trophy">🏆</div>
+    <div id="winner-name"></div>
+    <p class="winner-sub">wins the round!</p>
+    <ul id="scores-list"></ul>
+    <div class="gameover-actions">
+      <button class="btn btn-gold" id="play-again-btn">🔁 Play Again</button>
+      <button class="btn btn-secondary" id="setup-btn">⚙️ Setup</button>
+      <button class="btn btn-rewarded hidden" id="rewarded-btn" onclick="requestRewardAd()">🎁 Watch Ad → +3 Cards</button>
+    </div>
+  </div>
+</div>
+
+<!-- ES Module entry point -->
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

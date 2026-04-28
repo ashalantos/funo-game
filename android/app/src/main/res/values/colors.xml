@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_dark">#0f0c29</color>
+    <color name="purple_mid">#302b63</color>
+    <color name="gold">#FFD700</color>
+    <color name="accent_red">#ff6b6b</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="status_bar">#0a0820</color>
+</resources>

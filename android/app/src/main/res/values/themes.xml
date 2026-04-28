@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme -->
+    <style name="Theme.Funo" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/purple_dark</item>
+        <item name="android:statusBarColor">@color/status_bar</item>
+        <item name="android:navigationBarColor">@color/purple_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <!-- Keep screen portrait only -->
+        <item name="android:screenOrientation">portrait</item>
+    </style>
+
+    <!-- Splash screen theme -->
+    <style name="Theme.Funo.Splash" parent="Theme.SplashScreen">
+        <!-- The icon shown on the splash screen (use your app icon) -->
+        <item name="windowSplashScreenBackground">@color/purple_dark</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.Funo</item>
+    </style>
+
+</resources>
