@@ -150,13 +150,15 @@ export function buildCardEl(card, faceDown, playable) {
   el.dataset.id = card.id;
 
   if (faceDown) {
-    el.innerHTML = '<div class="card-inner"><span class="card-back-logo">F</span></div>';
+    el.innerHTML = '<div class="card-inner"><span class="card-back-logo">FUNO!</span></div>';
     return el;
   }
 
+  let hex = null;
   if (!isWild && !isVar && card.color && COLOR_DATA[card.color]) {
-    const hex = COLOR_DATA[card.color].hex;
-    el.style.background = 'linear-gradient(160deg, ' + hex + 'ee, ' + hex + '99)';
+    hex = COLOR_DATA[card.color].hex;
+    // Use a rich solid-to-shade gradient matching real UNO card look
+    el.style.background = 'linear-gradient(160deg, ' + hex + ' 0%, ' + hex + 'cc 100%)';
   }
 
   const sym    = card.type === 'number' ? card.value : (SYMBOL[card.type] !== undefined ? SYMBOL[card.type] : card.type);
@@ -168,6 +170,12 @@ export function buildCardEl(card, faceDown, playable) {
     '<span class="card-center-symbol">' + sym + '</span>' +
     '<span class="card-corner br">' + corner + '</span>' +
     '</div>';
+
+  // Color the center symbol to match the card color (sits on white oval)
+  if (hex && !isWild && !isVar) {
+    const symEl = el.querySelector('.card-center-symbol');
+    if (symEl) symEl.style.color = hex;
+  }
 
   return el;
 }
